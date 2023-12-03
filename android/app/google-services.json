@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "242189819890",
+    "project_id": "birthdays-reminder-313",
+    "storage_bucket": "birthdays-reminder-313.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:242189819890:android:f0c57ef75580dd80ed556b",
+        "android_client_info": {
+          "package_name": "com.sebastianlech.birthdays_reminder_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDhkdEASSqKhD62tK_olZJfII9DUYrl0QU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

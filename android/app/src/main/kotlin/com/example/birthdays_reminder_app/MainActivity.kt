@@ -1,4 +1,4 @@
-package com.example.birthdays_reminder_app
+package com.sebastianlech.birthdays_reminder_app
 
 import io.flutter.embedding.android.FlutterActivity
 
