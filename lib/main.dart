@@ -1,3 +1,5 @@
+import 'package:birthdays_reminder_app/app/home/home_page.dart';
+import 'package:birthdays_reminder_app/app/login/login_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -40,13 +42,9 @@ class RootPage extends StatelessWidget {
         builder: (context, snapshot) {
           final user = snapshot.data;
           if (user == null) {
-            return const Scaffold(
-              body: Center(child: Text('You are not logged in')),
-            );
+            return const LoginPage();
           }
-          return Scaffold(
-            body: Center(child: Text('You are logged in as ${user.email}')),
-          );
+          return HomePage(user: user);
         });
   }
 }
