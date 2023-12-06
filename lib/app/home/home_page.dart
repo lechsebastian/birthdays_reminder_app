@@ -12,7 +12,21 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(child: Text('You are logged in as ${user.email}')),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('You are logged in as ${user.email}'),
+            const SizedBox(height: 24),
+            ElevatedButton(
+              onPressed: () async {
+                await FirebaseAuth.instance.signOut();
+              },
+              child: const Text('Log out'),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
