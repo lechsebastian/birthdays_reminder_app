@@ -15,6 +15,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   var errorMessage = '';
+  var isCreatingAccount = false;
 
   @override
   Widget build(BuildContext context) {
@@ -26,18 +27,18 @@ class _LoginPageState extends State<LoginPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Icon(Icons.lock, size: 108),
-              const SizedBox(height: 24),
+              const SizedBox(height: 12),
               const Text(
                 'Welcome!',
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
-              const Text(
-                'It is nice to see you again',
-                style: TextStyle(
+              Text(
+                isCreatingAccount == true ? 'It is nice to see you here' : 'It is nice to see you again',
+                style: const TextStyle(
                   color: Colors.grey,
                 ),
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 12),
               TextField(
                 controller: widget.emailController,
                 decoration: const InputDecoration(label: Text('email')),
@@ -52,26 +53,46 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(height: 12),
               ElevatedButton(
                   onPressed: () async {
-                    try {
-                      await FirebaseAuth.instance.signInWithEmailAndPassword(
-                        email: widget.emailController.text,
-                        password: widget.passwordController.text,
-                      );
-                    } catch (error) {
-                      setState(() {
-                        errorMessage = 'Error occured: ${error.toString()}';
-                      });
+                    if (isCreatingAccount) {
+                      try {
+                        await FirebaseAuth.instance.createUserWithEmailAndPassword(
+                          email: widget.emailController.text,
+                          password: widget.passwordController.text,
+                        );
+                      } catch (error) {
+                        setState(() {
+                          errorMessage = 'Error occured: ${error.toString()}';
+                        });
+                      }
+                    } else {
+                      try {
+                        await FirebaseAuth.instance.signInWithEmailAndPassword(
+                          email: widget.emailController.text,
+                          password: widget.passwordController.text,
+                        );
+                      } catch (error) {
+                        setState(() {
+                          errorMessage = 'Error occured: ${error.toString()}';
+                        });
+                      }
                     }
                   },
-                  child: const Text('Log in')),
-              const SizedBox(height: 36),
-              const Row(
+                  child: Text(isCreatingAccount == true ? 'Register' : 'Log in')),
+              const SizedBox(height: 24),
+              Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('Not a member?'),
-                  Text(
-                    ' Register now',
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                  Text(isCreatingAccount == true ? 'Already have an account?' : 'Not a member?'),
+                  TextButton(
+                    onPressed: () {
+                      setState(() {
+                        isCreatingAccount = !isCreatingAccount;
+                      });
+                    },
+                    child: Text(
+                      isCreatingAccount == true ? 'Log in' : 'Register now',
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
                   )
                 ],
               ),
