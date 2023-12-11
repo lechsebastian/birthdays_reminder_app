@@ -5,7 +5,10 @@ import 'package:flutter/material.dart';
 class AddBirthdayPageContent extends StatefulWidget {
   const AddBirthdayPageContent({
     super.key,
+    required this.onSave,
   });
+
+  final Function onSave;
 
   @override
   State<AddBirthdayPageContent> createState() => _AddBirthdayPageContentState();
@@ -55,13 +58,16 @@ class _AddBirthdayPageContentState extends State<AddBirthdayPageContent> {
               height: 24,
             ),
             ElevatedButton(
-              onPressed: () {
-                FirebaseFirestore.instance.collection('birthdays').add({
-                  'name': name,
-                  'date': date,
-                  'days': daysRandom,
-                });
-              },
+              onPressed: name.isEmpty || date.isEmpty
+                  ? null
+                  : () {
+                      FirebaseFirestore.instance.collection('birthdays').add({
+                        'name': name,
+                        'date': date,
+                        'days': daysRandom,
+                      });
+                      widget.onSave;
+                    },
               child: const Text('Add'),
             ),
           ],
