@@ -9,7 +9,7 @@ class BirthdaysPageContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-        stream: FirebaseFirestore.instance.collection('birthdays').snapshots(),
+        stream: FirebaseFirestore.instance.collection('birthdays').orderBy('days').snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return const Text('Something went wrong');
