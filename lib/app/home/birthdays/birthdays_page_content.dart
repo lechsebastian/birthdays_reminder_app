@@ -72,6 +72,9 @@ class BirthdaysPageContent extends StatelessWidget {
                       ),
                     ),
                   ),
+                  const SizedBox(
+                    height: 24,
+                  ),
                 ],
               ],
             ),
