@@ -1,4 +1,4 @@
-import 'package:birthdays_reminder_app/app/home/birthdays/cubit/birthdays_cubit.dart';
+import 'package:birthdays_reminder_app/app/features/home/birthdays/cubit/birthdays_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
