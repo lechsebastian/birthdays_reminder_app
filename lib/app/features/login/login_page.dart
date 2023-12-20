@@ -1,5 +1,6 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:birthdays_reminder_app/app/cubit/root_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({
@@ -52,13 +53,10 @@ class _LoginPageState extends State<LoginPage> {
               Text(errorMessage),
               const SizedBox(height: 12),
               ElevatedButton(
-                  onPressed: () async {
+                  onPressed: () {
                     if (isCreatingAccount) {
                       try {
-                        await FirebaseAuth.instance.createUserWithEmailAndPassword(
-                          email: widget.emailController.text,
-                          password: widget.passwordController.text,
-                        );
+                        context.read<RootCubit>().register(email: widget.emailController.text, password: widget.passwordController.text);
                       } catch (error) {
                         setState(() {
                           errorMessage = 'Error occured: ${error.toString()}';
@@ -66,10 +64,7 @@ class _LoginPageState extends State<LoginPage> {
                       }
                     } else {
                       try {
-                        await FirebaseAuth.instance.signInWithEmailAndPassword(
-                          email: widget.emailController.text,
-                          password: widget.passwordController.text,
-                        );
+                        context.read<RootCubit>().signIn(email: widget.emailController.text, password: widget.passwordController.text);
                       } catch (error) {
                         setState(() {
                           errorMessage = 'Error occured: ${error.toString()}';
