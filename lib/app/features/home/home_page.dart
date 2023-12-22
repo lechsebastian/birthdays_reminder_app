@@ -1,6 +1,6 @@
-import 'package:birthdays_reminder_app/app/home/add_birthday/add_birthday_page_content.dart';
-import 'package:birthdays_reminder_app/app/home/birthdays/birthdays_page_content.dart';
-import 'package:birthdays_reminder_app/app/home/my_account/my_account_page_content.dart';
+import 'package:birthdays_reminder_app/app/features/home/add_birthday/add_birthday_page_content.dart';
+import 'package:birthdays_reminder_app/app/features/home/birthdays/birthdays_page_content.dart';
+import 'package:birthdays_reminder_app/app/features/home/my_account/my_account_page_content.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
