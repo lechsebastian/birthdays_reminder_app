@@ -12,7 +12,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.black),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.black,
+        ),
         useMaterial3: true,
       ),
       home: const RootPage(),
@@ -32,7 +34,8 @@ class RootPage extends StatelessWidget {
       child: BlocBuilder<RootCubit, RootState>(
         builder: (context, state) {
           if (state.errorMessage.isNotEmpty) {
-            return Center(child: Text('Something went wrong: ${state.errorMessage}'));
+            return Center(
+                child: Text('Something went wrong: ${state.errorMessage}'));
           }
           if (state.isLoading) {
             return const Center(

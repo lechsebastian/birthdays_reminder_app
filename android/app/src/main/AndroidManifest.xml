@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
-        android:label="birthdays_reminder_app"
+        android:label="Birthdays Reminder"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
