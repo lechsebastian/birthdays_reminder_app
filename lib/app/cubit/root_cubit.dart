@@ -23,7 +23,7 @@ class RootCubit extends Cubit<RootState> {
   }
 
   Future<void> register({required String email, required String password}) async {
-    FirebaseAuth.instance.createUserWithEmailAndPassword(
+    await FirebaseAuth.instance.createUserWithEmailAndPassword(
       email: email,
       password: password,
     );

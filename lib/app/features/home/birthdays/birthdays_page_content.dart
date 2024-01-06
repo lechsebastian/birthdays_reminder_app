@@ -59,13 +59,14 @@ class BirthdaysPageContent extends StatelessWidget {
                                   ),
                                   const SizedBox(width: 14),
                                   Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         document['name'],
                                         style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                                       ),
                                       Text(
-                                        document['date'],
+                                        document['phoneNumber'],
                                       ),
                                     ],
                                   ),
@@ -73,12 +74,17 @@ class BirthdaysPageContent extends StatelessWidget {
                               ),
                             ],
                           ),
-                          Text(
-                            document['days'].toString(),
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18,
-                            ),
+                          Column(
+                            children: [
+                              Text(
+                                document['days'].toString(),
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18,
+                                ),
+                              ),
+                              const Text('days left')
+                            ],
                           ),
                         ],
                       ),

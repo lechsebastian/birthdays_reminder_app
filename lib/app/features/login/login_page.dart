@@ -27,12 +27,13 @@ class _LoginPageState extends State<LoginPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(Icons.lock, size: 108),
-              const SizedBox(height: 12),
+              const Icon(Icons.calendar_month, size: 108),
+              const SizedBox(height: 72),
               const Text(
                 'Welcome!',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 42, fontWeight: FontWeight.bold),
               ),
+              const SizedBox(height: 6),
               Text(
                 isCreatingAccount == true ? 'It is nice to see you here' : 'It is nice to see you again',
                 style: const TextStyle(
@@ -49,9 +50,28 @@ class _LoginPageState extends State<LoginPage> {
                 decoration: const InputDecoration(label: Text('password')),
                 obscureText: true,
               ),
-              const SizedBox(height: 12),
               Text(errorMessage),
-              const SizedBox(height: 12),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Text(
+                    isCreatingAccount == true ? 'Already have an account?' : 'Not a member?',
+                    style: const TextStyle(fontSize: 10),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      setState(() {
+                        isCreatingAccount = !isCreatingAccount;
+                      });
+                    },
+                    child: Text(
+                      isCreatingAccount == true ? 'Log in' : 'Register now',
+                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 10),
+                    ),
+                  )
+                ],
+              ),
+              const SizedBox(height: 48),
               ElevatedButton(
                   onPressed: () {
                     if (isCreatingAccount) {
@@ -73,24 +93,6 @@ class _LoginPageState extends State<LoginPage> {
                     }
                   },
                   child: Text(isCreatingAccount == true ? 'Register' : 'Log in')),
-              const SizedBox(height: 24),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(isCreatingAccount == true ? 'Already have an account?' : 'Not a member?'),
-                  TextButton(
-                    onPressed: () {
-                      setState(() {
-                        isCreatingAccount = !isCreatingAccount;
-                      });
-                    },
-                    child: Text(
-                      isCreatingAccount == true ? 'Log in' : 'Register now',
-                      style: const TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                  )
-                ],
-              ),
             ],
           ),
         ),
