@@ -47,6 +47,17 @@ class BirthdaysCubit extends Cubit<BirthdaysState> {
       });
   }
 
+  Future<void> deleteDocument({required String documentID}) async {
+    try {
+      await FirebaseFirestore.instance.collection('birthdays').doc(documentID).delete();
+    } catch (error) {
+      emit(
+        const BirthdaysState(removingErrorOccured: true),
+      );
+      start();
+    }
+  }
+
   // Future<void> loadBirthdays() async {
   //   final snapshot = await FirebaseFirestore.instance.collection('birthdays').get();
 

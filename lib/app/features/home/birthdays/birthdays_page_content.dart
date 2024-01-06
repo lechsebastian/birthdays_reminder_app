@@ -31,62 +31,88 @@ class BirthdaysPageContent extends StatelessWidget {
           }
 
           final documents = state.documents;
-
+          if (documents == null) {
+            return const SizedBox.shrink();
+          }
           return Padding(
             padding: const EdgeInsets.all(24),
             child: ListView(
               children: [
                 for (final document in documents) ...[
-                  Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.black),
-                      borderRadius: BorderRadius.circular(12),
+                  Dismissible(
+                    key: ValueKey(document.id),
+                    background: const DecoratedBox(
+                      decoration: BoxDecoration(
+                        color: Colors.red,
+                      ),
+                      child: Align(
+                        alignment: Alignment.centerRight,
+                        child: Padding(
+                          padding: EdgeInsets.only(right: 32.0),
+                          child: Icon(
+                            Icons.delete,
+                          ),
+                        ),
+                      ),
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(12.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Column(
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    decoration: BoxDecoration(color: Colors.grey, borderRadius: BorderRadius.circular(12)),
-                                    padding: const EdgeInsets.all(8),
-                                    child: const Icon(Icons.person, size: 36),
-                                  ),
-                                  const SizedBox(width: 14),
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        document['name'],
-                                        style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                                      ),
-                                      Text(
-                                        document['phoneNumber'],
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                          Column(
-                            children: [
-                              Text(
-                                document['days'].toString(),
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 18,
+                    confirmDismiss: (direction) async {
+                      // tylko z prawej do lewej usuwa
+                      return direction == DismissDirection.endToStart;
+                    },
+                    onDismissed: (direction) {
+                      context.read<BirthdaysCubit>().deleteDocument(documentID: document.id);
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.black),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      decoration: BoxDecoration(color: Colors.grey, borderRadius: BorderRadius.circular(12)),
+                                      padding: const EdgeInsets.all(8),
+                                      child: const Icon(Icons.person, size: 36),
+                                    ),
+                                    const SizedBox(width: 14),
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          document['name'],
+                                          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                                        ),
+                                        Text(
+                                          document['phoneNumber'],
+                                        ),
+                                      ],
+                                    ),
+                                  ],
                                 ),
-                              ),
-                              const Text('days left')
-                            ],
-                          ),
-                        ],
+                              ],
+                            ),
+                            Column(
+                              children: [
+                                Text(
+                                  document['days'].toString(),
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18,
+                                  ),
+                                ),
+                                const Text('days left')
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
