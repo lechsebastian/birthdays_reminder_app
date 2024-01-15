@@ -1,4 +1,7 @@
 import 'package:birthdays_reminder_app/app/features/home/birthdays/cubit/birthdays_cubit.dart';
+import 'package:birthdays_reminder_app/app/features/home/details/details_page_content.dart';
+import 'package:birthdays_reminder_app/models/item_model.dart';
+import 'package:birthdays_reminder_app/repositories/items_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -10,120 +13,139 @@ class BirthdaysPageContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      // w emit start trzeba obliczyc/pokazywac liczbe dni do urodzin, bo wtedy bd odswiezane przy przejsciu do ekranu
-      create: (context) => BirthdaysCubit()..start(),
-      child: BlocBuilder<BirthdaysCubit, BirthdaysState>(
-        builder: (context, state) {
+      create: (context) => BirthdaysCubit(ItemsRepository())..start(),
+      child: BlocListener<BirthdaysCubit, BirthdaysState>(
+        listener: (context, state) {
           if (state.errorMessage.isNotEmpty) {
-            return Center(child: Text('Something went wrong: ${state.errorMessage}'));
-          }
-          if (state.isLoading) {
-            return const Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  CircularProgressIndicator(),
-                  SizedBox(height: 12),
-                  Text('Loading..'),
-                ],
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Something went wrong: ${state.errorMessage}'),
+                backgroundColor: Colors.red,
               ),
             );
           }
-
-          final documents = state.documents;
-          if (documents == null) {
-            return const SizedBox.shrink();
+          if (state.isLoading) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('It\'s loading..'),
+                backgroundColor: Colors.red,
+              ),
+            );
           }
-          return Padding(
-            padding: const EdgeInsets.all(24),
-            child: ListView(
-              children: [
-                for (final document in documents) ...[
-                  Dismissible(
-                    key: ValueKey(document.id),
-                    background: const DecoratedBox(
-                      decoration: BoxDecoration(
-                        color: Colors.red,
-                      ),
-                      child: Align(
-                        alignment: Alignment.centerRight,
-                        child: Padding(
-                          padding: EdgeInsets.only(right: 32.0),
-                          child: Icon(
-                            Icons.delete,
-                          ),
-                        ),
-                      ),
+        },
+        child: BlocBuilder<BirthdaysCubit, BirthdaysState>(
+          builder: (context, state) {
+            final itemModels = state.items;
+            return Padding(
+              padding: const EdgeInsets.all(24),
+              child: ListView(
+                children: [
+                  for (final itemModel in itemModels) ...[
+                    _ListViewItem(itemModel: itemModel),
+                    const SizedBox(
+                      height: 24,
                     ),
-                    confirmDismiss: (direction) async {
-                      // tylko z prawej do lewej usuwa
-                      return direction == DismissDirection.endToStart;
-                    },
-                    onDismissed: (direction) {
-                      context.read<BirthdaysCubit>().deleteDocument(documentID: document.id);
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.black),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  ],
+                ],
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
+
+class _ListViewItem extends StatelessWidget {
+  const _ListViewItem({
+    required this.itemModel,
+  });
+
+  final ItemModel itemModel;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () {
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => DetailsPageContent(id: itemModel.id),
+        ));
+      },
+      child: Dismissible(
+        key: ValueKey(itemModel.id),
+        background: const DecoratedBox(
+          decoration: BoxDecoration(
+            color: Colors.red,
+          ),
+          child: Align(
+            alignment: Alignment.centerRight,
+            child: Padding(
+              padding: EdgeInsets.only(right: 32.0),
+              child: Icon(
+                Icons.delete,
+              ),
+            ),
+          ),
+        ),
+        confirmDismiss: (direction) async {
+          return direction == DismissDirection.endToStart;
+        },
+        onDismissed: (direction) {
+          context.read<BirthdaysCubit>().deleteDocument(documentID: itemModel.id);
+        },
+        child: Container(
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.black),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(color: Colors.grey, borderRadius: BorderRadius.circular(12)),
+                          padding: const EdgeInsets.all(8),
+                          child: const Icon(Icons.person, size: 36),
+                        ),
+                        const SizedBox(width: 14),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Column(
-                              children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      decoration: BoxDecoration(color: Colors.grey, borderRadius: BorderRadius.circular(12)),
-                                      padding: const EdgeInsets.all(8),
-                                      child: const Icon(Icons.person, size: 36),
-                                    ),
-                                    const SizedBox(width: 14),
-                                    Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          document['name'],
-                                          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                                        ),
-                                        Text(
-                                          document['phoneNumber'],
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ],
+                            Text(
+                              itemModel.name,
+                              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                             ),
-                            Column(
-                              children: [
-                                Text(
-                                  document['days'].toString(),
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 18,
-                                  ),
-                                ),
-                                const Text('days left')
-                              ],
+                            Text(
+                              itemModel.phoneNumber,
                             ),
                           ],
                         ),
+                      ],
+                    ),
+                  ],
+                ),
+                Column(
+                  children: [
+                    Text(
+                      itemModel.daysUntilNextBirthday(),
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
                       ),
                     ),
-                  ),
-                  const SizedBox(
-                    height: 24,
-                  ),
-                ],
+                    const Text('days left')
+                  ],
+                ),
               ],
             ),
-          );
-        },
+          ),
+        ),
       ),
     );
   }

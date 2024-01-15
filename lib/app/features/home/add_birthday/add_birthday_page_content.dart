@@ -1,6 +1,7 @@
 // ignore_for_file: sized_box_for_whitespace
 
 import 'package:birthdays_reminder_app/app/features/home/add_birthday/cubit/add_birthday_cubit.dart';
+import 'package:birthdays_reminder_app/repositories/items_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -19,17 +20,17 @@ class AddBirthdayPageContent extends StatefulWidget {
 class _AddBirthdayPageContentState extends State<AddBirthdayPageContent> {
   String name = '';
   String phoneNumber = '';
-  DateTime? releaseDate;
+  DateTime? birthday;
   String? selectedDateFormatted;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => AddBirthdayCubit(),
+      create: (context) => AddBirthdayCubit(ItemsRepository()),
       child: BlocListener<AddBirthdayCubit, AddBirthdayState>(
         listener: (context, state) {
           if (state.saved) {
-            widget.onSave;
+            widget.onSave();
           }
           if (state.errorMessage.isNotEmpty) {
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -89,7 +90,7 @@ class _AddBirthdayPageContentState extends State<AddBirthdayPageContent> {
                           firstDate: DateTime.now().subtract(const Duration(days: 365 * 150)),
                           lastDate: DateTime.now(),
                         );
-                        releaseDate = selectedDate;
+                        birthday = selectedDate;
                         setState(() {
                           selectedDateFormatted = selectedDate?.toIso8601String();
                         });
@@ -98,7 +99,7 @@ class _AddBirthdayPageContentState extends State<AddBirthdayPageContent> {
                         padding: const EdgeInsets.all(20),
                         child: Container(
                           width: MediaQuery.of(context).size.width,
-                          child: Text(selectedDateFormatted ?? 'Choose release date', textAlign: TextAlign.center),
+                          child: Text(selectedDateFormatted ?? 'Choose birthday date', textAlign: TextAlign.center),
                         ),
                       ),
                     ),
@@ -109,7 +110,7 @@ class _AddBirthdayPageContentState extends State<AddBirthdayPageContent> {
                       onPressed: name.isEmpty || phoneNumber.isEmpty || selectedDateFormatted == null
                           ? null
                           : () {
-                              context.read<AddBirthdayCubit>().add(name, phoneNumber, releaseDate!);
+                              context.read<AddBirthdayCubit>().add(name, phoneNumber, birthday!);
                             },
                       child: const Text('Add'),
                     ),

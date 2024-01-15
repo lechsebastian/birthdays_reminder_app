@@ -1,36 +1,40 @@
 import 'dart:async';
+import 'package:birthdays_reminder_app/models/item_model.dart';
+import 'package:birthdays_reminder_app/repositories/items_repository.dart';
 import 'package:bloc/bloc.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:meta/meta.dart';
 
 part 'birthdays_state.dart';
 
 class BirthdaysCubit extends Cubit<BirthdaysState> {
-  BirthdaysCubit()
+  BirthdaysCubit(this._itemsRepository)
       : super(
           const BirthdaysState(
-            documents: [],
+            items: [],
             isLoading: false,
             errorMessage: '',
           ),
         );
 
+  final ItemsRepository _itemsRepository;
   StreamSubscription? _streamSubscription;
 
   Future<void> start() async {
     emit(
       const BirthdaysState(
-        documents: [],
+        items: [],
         isLoading: true,
         errorMessage: '',
       ),
     );
 
-    _streamSubscription = FirebaseFirestore.instance.collection('birthdays').orderBy('days').snapshots().listen(
-      (event) {
+    _streamSubscription = _itemsRepository.getItemsStream().listen(
+      (items) {
+        items.sort((a, b) => _daysUntilNextBirthday(a.birthday).compareTo(_daysUntilNextBirthday(b.birthday)));
+
         emit(
           BirthdaysState(
-            documents: event.docs,
+            items: items,
             isLoading: false,
             errorMessage: '',
           ),
@@ -39,7 +43,7 @@ class BirthdaysCubit extends Cubit<BirthdaysState> {
     )..onError((error) {
         emit(
           BirthdaysState(
-            documents: const [],
+            items: const [],
             isLoading: false,
             errorMessage: error.toString(),
           ),
@@ -49,7 +53,7 @@ class BirthdaysCubit extends Cubit<BirthdaysState> {
 
   Future<void> deleteDocument({required String documentID}) async {
     try {
-      await FirebaseFirestore.instance.collection('birthdays').doc(documentID).delete();
+      await _itemsRepository.delete(id: documentID);
     } catch (error) {
       emit(
         const BirthdaysState(removingErrorOccured: true),
@@ -58,30 +62,15 @@ class BirthdaysCubit extends Cubit<BirthdaysState> {
     }
   }
 
-  // Future<void> loadBirthdays() async {
-  //   final snapshot = await FirebaseFirestore.instance.collection('birthdays').get();
-
-  //   final people = snapshot.documents.map((doc) {
-  //     final data = doc.data;
-  //     final birthday = (data['data'] as Timestamp).toDate();
-  //     final name = data['imie'];
-  //     return Person(name: name, birthday: birthday);
-  //   }).toList();
-
-  //   people.sort((a, b) => _daysUntilNextBirthday(a.birthday).compareTo(_daysUntilNextBirthday(b.birthday)));
-
-  //   emit(people);
-  // }
-
-  // int _daysUntilNextBirthday(DateTime birthday) {
-  //   final now = DateTime.now();
-  //   final nextBirthday = DateTime(now.year, birthday.month, birthday.day);
-  //   if (nextBirthday.isBefore(now)) {
-  //     return nextBirthday.add(const Duration(days: 365)).difference(now).inDays;
-  //   } else {
-  //     return nextBirthday.difference(now).inDays;
-  //   }
-  // }
+  int _daysUntilNextBirthday(DateTime birthday) {
+    final now = DateTime.now();
+    final nextBirthday = DateTime(now.year, birthday.month, birthday.day);
+    if (nextBirthday.isBefore(now)) {
+      return nextBirthday.add(const Duration(days: 365)).difference(now).inDays;
+    } else {
+      return nextBirthday.difference(now).inDays;
+    }
+  }
 
   @override
   Future<void> close() {
