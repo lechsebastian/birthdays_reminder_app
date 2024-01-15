@@ -3,6 +3,7 @@ import 'package:birthdays_reminder_app/app/features/home/details/details_page_co
 import 'package:birthdays_reminder_app/models/item_model.dart';
 import 'package:birthdays_reminder_app/repositories/items_repository.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class BirthdaysPageContent extends StatelessWidget {
@@ -117,12 +118,17 @@ class _ListViewItem extends StatelessWidget {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            // name
                             Text(
                               itemModel.name,
                               style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                             ),
+
+                            // birthday date
+                            const SizedBox(height: 2),
                             Text(
-                              itemModel.phoneNumber,
+                              itemModel.nextBirthdayFormatted(),
+                              style: const TextStyle(fontSize: 13),
                             ),
                           ],
                         ),
@@ -132,14 +138,28 @@ class _ListViewItem extends StatelessWidget {
                 ),
                 Column(
                   children: [
-                    Text(
-                      itemModel.daysUntilNextBirthday(),
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                      ),
+                    Row(
+                      children: [
+                        // how many days
+                        Text(
+                          itemModel.daysUntilNextBirthday(),
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                          ),
+                        ),
+                        Text(
+                          int.parse(itemModel.daysUntilNextBirthday()) > 0 ? ' days' : 'day',
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                          ),
+                        ),
+                      ],
                     ),
-                    const Text('days left')
+
+                    // turns ages
+                    Text('Turns ${itemModel.turnsAges()}')
                   ],
                 ),
               ],

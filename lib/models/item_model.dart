@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 class ItemModel {
   ItemModel({
     required this.id,
@@ -19,5 +21,19 @@ class ItemModel {
     } else {
       return nextBirthday.difference(now).inDays.toString();
     }
+  }
+
+  String birthdayFormattedDetailsPage() {
+    return DateFormat.yMMMMd().format(birthday).toString();
+  }
+
+  String nextBirthdayFormatted() {
+    final now = DateTime.now();
+    final nextBirthday = DateTime(now.year, birthday.month, birthday.day);
+    return DateFormat.MMMEd().format(nextBirthday).toString();
+  }
+
+  String turnsAges() {
+    return (DateTime.now().year - birthday.year).toString();
   }
 }

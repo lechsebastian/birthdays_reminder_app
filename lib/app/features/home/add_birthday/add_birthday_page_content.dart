@@ -4,6 +4,7 @@ import 'package:birthdays_reminder_app/app/features/home/add_birthday/cubit/add_
 import 'package:birthdays_reminder_app/repositories/items_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 
 class AddBirthdayPageContent extends StatefulWidget {
   const AddBirthdayPageContent({
@@ -92,7 +93,7 @@ class _AddBirthdayPageContentState extends State<AddBirthdayPageContent> {
                         );
                         birthday = selectedDate;
                         setState(() {
-                          selectedDateFormatted = selectedDate?.toIso8601String();
+                          selectedDateFormatted = selectedDate == null ? null : DateFormat.yMMMMEEEEd().format(selectedDate);
                         });
                       },
                       child: Padding(

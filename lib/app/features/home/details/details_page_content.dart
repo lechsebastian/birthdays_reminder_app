@@ -41,7 +41,7 @@ class DetailsPageContent extends StatelessWidget {
                     child: const Icon(Icons.person, size: 144),
                   ),
 
-                  // name
+                  // name and info "turns x"
                   const SizedBox(height: 16),
                   Text(
                     itemModel.name,
@@ -52,14 +52,14 @@ class DetailsPageContent extends StatelessWidget {
                   ),
 
                   // days to birthday
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 4),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const Icon(Icons.cake),
                       const SizedBox(width: 4),
-                      Text(itemModel.daysUntilNextBirthday()),
-                      Text(days > 0 ? ' days to birthday' : ' day to birthday'),
+                      Text('Turns ${itemModel.turnsAges()} in ${itemModel.daysUntilNextBirthday()}'),
+                      Text(days > 0 ? ' days' : ' day'),
                     ],
                   ),
 
@@ -74,7 +74,7 @@ class DetailsPageContent extends StatelessWidget {
                           const Icon(Icons.calendar_today_outlined),
                           const SizedBox(width: 8),
                           Text(
-                            itemModel.birthday.toString(),
+                            itemModel.birthdayFormattedDetailsPage(),
                           ),
                         ],
                       ),
