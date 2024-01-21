@@ -31,30 +31,35 @@ class RootPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => RootCubit()..start(),
-      child: BlocBuilder<RootCubit, RootState>(
-        builder: (context, state) {
+      child: BlocListener<RootCubit, RootState>(
+        listener: (context, state) {
           if (state.errorMessage.isNotEmpty) {
-            return Center(child: Text('Something went wrong: ${state.errorMessage}'));
-          }
-          if (state.isLoading) {
-            return const Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  CircularProgressIndicator(),
-                  SizedBox(height: 12),
-                  Text('Loading..'),
-                ],
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Something went wrong: ${state.errorMessage}'),
+                backgroundColor: Colors.red,
               ),
             );
           }
-          final user = state.user;
-
-          if (user == null) {
-            return LoginPage();
+          if (state.isLoading) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('It\'s loading..'),
+                backgroundColor: Colors.red,
+              ),
+            );
           }
-          return HomePage(user: user);
         },
+        child: BlocBuilder<RootCubit, RootState>(
+          builder: (context, state) {
+            final user = state.user;
+
+            if (user == null) {
+              return LoginPage();
+            }
+            return HomePage(user: user);
+          },
+        ),
       ),
     );
   }

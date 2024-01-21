@@ -3,7 +3,6 @@ import 'package:birthdays_reminder_app/app/features/home/details/details_page_co
 import 'package:birthdays_reminder_app/models/item_model.dart';
 import 'package:birthdays_reminder_app/repositories/items_repository.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class BirthdaysPageContent extends StatelessWidget {
@@ -137,6 +136,7 @@ class _ListViewItem extends StatelessWidget {
                   ],
                 ),
                 Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Row(
                       children: [

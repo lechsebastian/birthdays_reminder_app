@@ -1,9 +1,15 @@
 import 'package:birthdays_reminder_app/models/item_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class ItemsRepository {
   Stream<List<ItemModel>> getItemsStream() {
-    return FirebaseFirestore.instance.collection('birthdays').snapshots().map(
+    final userId = FirebaseAuth.instance.currentUser?.uid;
+    if (userId == null) {
+      throw Exception('User is not logged in');
+    }
+
+    return FirebaseFirestore.instance.collection('users').doc(userId).collection('birthdays').snapshots().map(
       (querySnapshot) {
         return querySnapshot.docs.map(
           (doc) {
@@ -20,11 +26,21 @@ class ItemsRepository {
   }
 
   Future<void> delete({required String id}) {
-    return FirebaseFirestore.instance.collection('birthdays').doc(id).delete();
+    final userId = FirebaseAuth.instance.currentUser?.uid;
+    if (userId == null) {
+      throw Exception('User is not logged in');
+    }
+
+    return FirebaseFirestore.instance.collection('users').doc(userId).collection('birthdays').doc(id).delete();
   }
 
   Future<ItemModel> get({required String id}) async {
-    final doc = await FirebaseFirestore.instance.collection('birthdays').doc(id).get();
+    final userId = FirebaseAuth.instance.currentUser?.uid;
+    if (userId == null) {
+      throw Exception('User is not logged in');
+    }
+
+    final doc = await FirebaseFirestore.instance.collection('users').doc(userId).collection('birthdays').doc(id).get();
 
     return ItemModel(
       id: doc.id,
@@ -39,7 +55,12 @@ class ItemsRepository {
     String phoneNumber,
     DateTime birthday,
   ) async {
-    await FirebaseFirestore.instance.collection('birthdays').add(
+    final userId = FirebaseAuth.instance.currentUser?.uid;
+    if (userId == null) {
+      throw Exception('User is not logged in');
+    }
+
+    await FirebaseFirestore.instance.collection('users').doc(userId).collection('birthdays').add(
       {
         'name': name,
         'phoneNumber': phoneNumber,
