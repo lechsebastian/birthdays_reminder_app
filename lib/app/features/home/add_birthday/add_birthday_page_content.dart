@@ -67,6 +67,7 @@ class _AddBirthdayPageContentState extends State<AddBirthdayPageContent> {
 
                     // phone number
                     TextField(
+                      keyboardType: TextInputType.phone,
                       onChanged: (value) {
                         setState(() {
                           phoneNumber = value;
