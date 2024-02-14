@@ -1,6 +1,6 @@
 import 'package:birthdays_reminder_app/app/cubit/root_cubit.dart';
 import 'package:birthdays_reminder_app/app/features/login/cubit/login_cubit.dart';
-import 'package:birthdays_reminder_app/app/features/login_page_widgets/signin_or_register_widget_builder.dart';
+import 'package:birthdays_reminder_app/app/features/login/login_page_widgets/signin_or_register_widget_builder.dart';
 import 'package:birthdays_reminder_app/themes/my_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

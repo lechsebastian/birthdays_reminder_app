@@ -10,4 +10,5 @@ class LoginCubit extends Cubit<LoginState> {
 
     emit(newState);
   }
+
 }

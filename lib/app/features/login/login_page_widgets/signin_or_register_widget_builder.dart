@@ -1,5 +1,5 @@
-import 'package:birthdays_reminder_app/app/features/login_page_widgets/confirm_password.dart';
-import 'package:birthdays_reminder_app/app/features/login_page_widgets/forgotten_password.dart';
+import 'package:birthdays_reminder_app/app/features/login/login_page_widgets/confirm_password.dart';
+import 'package:birthdays_reminder_app/app/features/login/login_page_widgets/forgotten_password.dart';
 import 'package:flutter/material.dart';
 
 class SignInOrRegisterWidgetBuilder extends StatelessWidget {

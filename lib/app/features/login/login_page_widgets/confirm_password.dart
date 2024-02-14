@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ConfirmPasswordTextField extends StatefulWidget {
-  ConfirmPasswordTextField({
+  const ConfirmPasswordTextField({
     super.key,
     required this.confirmPasswordController,
     required this.onChanged,
