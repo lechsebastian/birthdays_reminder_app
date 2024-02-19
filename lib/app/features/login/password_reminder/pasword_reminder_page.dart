@@ -35,7 +35,11 @@ class PaswordReminderPage extends StatelessWidget {
         child: BlocBuilder<PasswordReminderCubit, PasswordReminderState>(
           builder: (context, state) {
             return Scaffold(
-              appBar: AppBar(),
+              appBar: AppBar(
+                foregroundColor: MyColor().myColor,
+                backgroundColor: Colors.transparent,
+                elevation: 0,
+              ),
               body: Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
