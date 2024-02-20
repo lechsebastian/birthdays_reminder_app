@@ -1,8 +1,10 @@
 import 'package:birthdays_reminder_app/app/cubit/root_cubit.dart';
 import 'package:birthdays_reminder_app/app/features/home/home_page.dart';
 import 'package:birthdays_reminder_app/app/features/login/login_page.dart';
+import 'package:birthdays_reminder_app/themes/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -11,12 +13,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.black,
-        ),
-        useMaterial3: false,
-      ),
+      theme: Provider.of<ThemeProvider>(context).getTheme(),
       home: const RootPage(),
     );
   }

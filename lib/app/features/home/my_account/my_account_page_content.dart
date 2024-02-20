@@ -1,7 +1,8 @@
 import 'package:birthdays_reminder_app/app/cubit/root_cubit.dart';
 import 'package:birthdays_reminder_app/themes/my_color.dart';
+import 'package:birthdays_reminder_app/themes/theme_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 
 class MyAccountPageContent extends StatefulWidget {
   const MyAccountPageContent({
@@ -16,13 +17,12 @@ class MyAccountPageContent extends StatefulWidget {
 }
 
 class _MyAccountPageContentState extends State<MyAccountPageContent> {
-  bool _switchValue = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        foregroundColor: MyColor().myColor,
+        foregroundColor: MyColor().myPrimaryColor,
         elevation: 0,
         backgroundColor: Colors.transparent,
         actions: [
@@ -48,7 +48,7 @@ class _MyAccountPageContentState extends State<MyAccountPageContent> {
                 const Text('You are logged in as '),
                 Text(
                   '${widget.email}',
-                  style: TextStyle(color: MyColor().myColor, fontWeight: FontWeight.bold),
+                  style: TextStyle(color: MyColor().myPrimaryColor, fontWeight: FontWeight.bold),
                 )
               ],
             ),
@@ -61,12 +61,11 @@ class _MyAccountPageContentState extends State<MyAccountPageContent> {
               children: [
                 const Text('Dark mode'),
                 Switch(
-                    value: _switchValue,
-                    onChanged: (value) {
-                      setState(() {
-                        _switchValue = value;
-                      });
-                    })
+                  value: Provider.of<ThemeProvider>(context).isDarkMode,
+                  onChanged: (value) {
+                    Provider.of<ThemeProvider>(context, listen: false).toggleTheme();
+                  },
+                )
               ],
             )
           ],

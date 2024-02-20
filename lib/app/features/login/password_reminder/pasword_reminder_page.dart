@@ -19,7 +19,7 @@ class PaswordReminderPage extends StatelessWidget {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: const Text('The password has been sent'),
-                backgroundColor: MyColor().myColor,
+                backgroundColor: MyColor().myPrimaryColor,
               ),
             );
           }
@@ -36,7 +36,7 @@ class PaswordReminderPage extends StatelessWidget {
           builder: (context, state) {
             return Scaffold(
               appBar: AppBar(
-                foregroundColor: MyColor().myColor,
+                foregroundColor: MyColor().myPrimaryColor,
                 backgroundColor: Colors.transparent,
                 elevation: 0,
               ),

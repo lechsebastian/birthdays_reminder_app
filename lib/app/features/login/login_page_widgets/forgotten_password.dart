@@ -19,7 +19,7 @@ class ForgottenPasswordText extends StatelessWidget {
           padding: const EdgeInsets.only(top: 12),
           child: Text(
             'Forgotten password?',
-            style: TextStyle(color: MyColor().myColor, fontWeight: FontWeight.bold),
+            style: TextStyle(color: MyColor().myPrimaryColor, fontWeight: FontWeight.bold),
           ),
         ),
       ),

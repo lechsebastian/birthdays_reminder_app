@@ -68,7 +68,7 @@ class _LoginPageState extends State<LoginPage> {
                             },
                             child: Text(
                               state.isCreatingAccount == true ? 'Log in' : 'Register',
-                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 10, color: MyColor().myColor),
+                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 10, color: MyColor().myPrimaryColor),
                             ),
                           )
                         ],
