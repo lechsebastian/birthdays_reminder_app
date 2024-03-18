@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:birthdays_reminder_app/app/core/enums.dart';
 import 'package:birthdays_reminder_app/models/item_model.dart';
 import 'package:birthdays_reminder_app/repositories/items_repository.dart';
 import 'package:bloc/bloc.dart';
@@ -7,14 +8,7 @@ import 'package:meta/meta.dart';
 part 'birthdays_state.dart';
 
 class BirthdaysCubit extends Cubit<BirthdaysState> {
-  BirthdaysCubit(this._itemsRepository)
-      : super(
-          const BirthdaysState(
-            items: [],
-            isLoading: false,
-            errorMessage: '',
-          ),
-        );
+  BirthdaysCubit(this._itemsRepository) : super(const BirthdaysState());
 
   final ItemsRepository _itemsRepository;
   StreamSubscription? _streamSubscription;
@@ -23,7 +17,7 @@ class BirthdaysCubit extends Cubit<BirthdaysState> {
     emit(
       const BirthdaysState(
         items: [],
-        isLoading: true,
+        status: Status.loading,
         errorMessage: '',
       ),
     );
@@ -35,7 +29,7 @@ class BirthdaysCubit extends Cubit<BirthdaysState> {
         emit(
           BirthdaysState(
             items: items,
-            isLoading: false,
+            status: Status.success,
             errorMessage: '',
           ),
         );
@@ -44,7 +38,7 @@ class BirthdaysCubit extends Cubit<BirthdaysState> {
         emit(
           BirthdaysState(
             items: const [],
-            isLoading: false,
+            status: Status.error,
             errorMessage: error.toString(),
           ),
         );
@@ -56,7 +50,7 @@ class BirthdaysCubit extends Cubit<BirthdaysState> {
       await _itemsRepository.delete(id: documentID);
     } catch (error) {
       emit(
-        const BirthdaysState(removingErrorOccured: true),
+        const BirthdaysState(status: Status.removingError),
       );
       start();
     }

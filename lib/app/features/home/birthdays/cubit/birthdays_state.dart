@@ -4,13 +4,11 @@ part of 'birthdays_cubit.dart';
 class BirthdaysState {
   const BirthdaysState({
     this.items = const [],
-    this.isLoading = false,
-    this.errorMessage = '',
-    this.removingErrorOccured = false,
+    this.status = Status.initial,
+    this.errorMessage,
   });
 
   final List<ItemModel> items;
-  final bool isLoading;
-  final String errorMessage;
-  final bool removingErrorOccured;
+  final Status status;
+  final String? errorMessage;
 }

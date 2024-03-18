@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:birthdays_reminder_app/app/core/enums.dart';
 import 'package:bloc/bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:meta/meta.dart';
@@ -7,14 +8,7 @@ import 'package:meta/meta.dart';
 part 'root_state.dart';
 
 class RootCubit extends Cubit<RootState> {
-  RootCubit()
-      : super(
-          const RootState(
-            user: null,
-            isLoading: false,
-            errorMessage: '',
-          ),
-        );
+  RootCubit() : super(const RootState());
 
   StreamSubscription? _streamSubscription;
 
@@ -29,7 +23,7 @@ class RootCubit extends Cubit<RootState> {
         password: password,
       );
     } catch (error) {
-      emit(RootState(user: null, isLoading: false, errorMessage: error.toString()));
+      emit(RootState(user: null, status: Status.error, errorMessage: error.toString()));
     }
   }
 
@@ -40,7 +34,7 @@ class RootCubit extends Cubit<RootState> {
         password: password,
       );
     } catch (error) {
-      emit(RootState(user: null, isLoading: false, errorMessage: error.toString()));
+      emit(RootState(user: null, status: Status.error, errorMessage: error.toString()));
     }
   }
 
@@ -48,7 +42,7 @@ class RootCubit extends Cubit<RootState> {
     emit(
       const RootState(
         user: null,
-        isLoading: true,
+        status: Status.loading,
         errorMessage: '',
       ),
     );
@@ -57,7 +51,7 @@ class RootCubit extends Cubit<RootState> {
       emit(
         RootState(
           user: event,
-          isLoading: false,
+          status: Status.success,
           errorMessage: '',
         ),
       );
@@ -66,7 +60,7 @@ class RootCubit extends Cubit<RootState> {
         emit(
           RootState(
             user: null,
-            isLoading: false,
+            status: Status.error,
             errorMessage: error.toString(),
           ),
         );

@@ -1,3 +1,4 @@
+import 'package:birthdays_reminder_app/app/core/enums.dart';
 import 'package:birthdays_reminder_app/app/features/home/birthdays/cubit/birthdays_cubit.dart';
 import 'package:birthdays_reminder_app/app/features/home/details/details_page_content.dart';
 import 'package:birthdays_reminder_app/models/item_model.dart';
@@ -16,15 +17,16 @@ class BirthdaysPageContent extends StatelessWidget {
       create: (context) => BirthdaysCubit(ItemsRepository())..start(),
       child: BlocConsumer<BirthdaysCubit, BirthdaysState>(
         listener: (context, state) {
-          if (state.errorMessage.isNotEmpty) {
+          if (state.status == Status.error) {
+            final errorMessage = state.errorMessage ?? 'Unknown error';
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text('Something went wrong: ${state.errorMessage}'),
+                content: Text('Something went wrong: $errorMessage'),
                 backgroundColor: Colors.red,
               ),
             );
           }
-          if (state.isLoading) {
+          if (state.status == Status.loading) {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
                 content: Text('It\'s loading..'),
