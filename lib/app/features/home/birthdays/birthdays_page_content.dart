@@ -14,7 +14,7 @@ class BirthdaysPageContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => BirthdaysCubit(ItemsRepository())..start(),
-      child: BlocListener<BirthdaysCubit, BirthdaysState>(
+      child: BlocConsumer<BirthdaysCubit, BirthdaysState>(
         listener: (context, state) {
           if (state.errorMessage.isNotEmpty) {
             ScaffoldMessenger.of(context).showSnackBar(
@@ -33,24 +33,22 @@ class BirthdaysPageContent extends StatelessWidget {
             );
           }
         },
-        child: BlocBuilder<BirthdaysCubit, BirthdaysState>(
-          builder: (context, state) {
-            final itemModels = state.items;
-            return Padding(
-              padding: const EdgeInsets.all(24),
-              child: ListView(
-                children: [
-                  for (final itemModel in itemModels) ...[
-                    _ListViewItem(itemModel: itemModel),
-                    const SizedBox(
-                      height: 24,
-                    ),
-                  ],
+        builder: (context, state) {
+          final itemModels = state.items;
+          return Padding(
+            padding: const EdgeInsets.all(24),
+            child: ListView(
+              children: [
+                for (final itemModel in itemModels) ...[
+                  _ListViewItem(itemModel: itemModel),
+                  const SizedBox(
+                    height: 24,
+                  ),
                 ],
-              ),
-            );
-          },
-        ),
+              ],
+            ),
+          );
+        },
       ),
     );
   }

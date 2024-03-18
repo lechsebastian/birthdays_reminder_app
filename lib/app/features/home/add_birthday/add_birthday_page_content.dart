@@ -28,7 +28,7 @@ class _AddBirthdayPageContentState extends State<AddBirthdayPageContent> {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => AddBirthdayCubit(ItemsRepository()),
-      child: BlocListener<AddBirthdayCubit, AddBirthdayState>(
+      child: BlocConsumer<AddBirthdayCubit, AddBirthdayState>(
         listener: (context, state) {
           if (state.saved) {
             widget.onSave();
@@ -40,88 +40,86 @@ class _AddBirthdayPageContentState extends State<AddBirthdayPageContent> {
             ));
           }
         },
-        child: BlocBuilder<AddBirthdayCubit, AddBirthdayState>(
-          builder: (context, state) {
-            return Center(
-              child: Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    // name
-                    TextField(
-                      onChanged: (value) {
-                        setState(() {
-                          name = value;
-                        });
-                      },
-                      decoration: const InputDecoration(
-                        label: Text('Name'),
-                        hintText: 'Adam Małysz',
-                        border: OutlineInputBorder(),
+        builder: (context, state) {
+          return Center(
+            child: Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // name
+                  TextField(
+                    onChanged: (value) {
+                      setState(() {
+                        name = value;
+                      });
+                    },
+                    decoration: const InputDecoration(
+                      label: Text('Name'),
+                      hintText: 'Adam Małysz',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 12,
+                  ),
+
+                  // phone number
+                  TextField(
+                    keyboardType: TextInputType.phone,
+                    onChanged: (value) {
+                      setState(() {
+                        phoneNumber = value;
+                      });
+                    },
+                    decoration: const InputDecoration(
+                      label: Text('Phone number'),
+                      hintText: '+48 533122345',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 12,
+                  ),
+
+                  // date time picker
+                  ElevatedButton(
+                    onPressed: () async {
+                      final selectedDate = await showDatePicker(
+                        context: context,
+                        initialDate: DateTime.now(),
+                        firstDate: DateTime.now().subtract(const Duration(days: 365 * 150)),
+                        lastDate: DateTime.now(),
+                      );
+                      birthday = selectedDate;
+                      setState(() {
+                        selectedDateFormatted = selectedDate == null ? null : DateFormat.yMMMMEEEEd().format(selectedDate);
+                      });
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(20),
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        child: Text(selectedDateFormatted ?? 'Choose birthday date', textAlign: TextAlign.center),
                       ),
                     ),
-                    const SizedBox(
-                      height: 12,
-                    ),
+                  ),
+                  const SizedBox(height: 24),
 
-                    // phone number
-                    TextField(
-                      keyboardType: TextInputType.phone,
-                      onChanged: (value) {
-                        setState(() {
-                          phoneNumber = value;
-                        });
-                      },
-                      decoration: const InputDecoration(
-                        label: Text('Phone number'),
-                        hintText: '+48 533122345',
-                        border: OutlineInputBorder(),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 12,
-                    ),
-
-                    // date time picker
-                    ElevatedButton(
-                      onPressed: () async {
-                        final selectedDate = await showDatePicker(
-                          context: context,
-                          initialDate: DateTime.now(),
-                          firstDate: DateTime.now().subtract(const Duration(days: 365 * 150)),
-                          lastDate: DateTime.now(),
-                        );
-                        birthday = selectedDate;
-                        setState(() {
-                          selectedDateFormatted = selectedDate == null ? null : DateFormat.yMMMMEEEEd().format(selectedDate);
-                        });
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.all(20),
-                        child: Container(
-                          width: MediaQuery.of(context).size.width,
-                          child: Text(selectedDateFormatted ?? 'Choose birthday date', textAlign: TextAlign.center),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 24),
-
-                    // save details button
-                    ElevatedButton(
-                      onPressed: name.isEmpty || phoneNumber.isEmpty || selectedDateFormatted == null
-                          ? null
-                          : () {
-                              context.read<AddBirthdayCubit>().add(name, phoneNumber, birthday!);
-                            },
-                      child: const Text('Add'),
-                    ),
-                  ],
-                ),
+                  // save details button
+                  ElevatedButton(
+                    onPressed: name.isEmpty || phoneNumber.isEmpty || selectedDateFormatted == null
+                        ? null
+                        : () {
+                            context.read<AddBirthdayCubit>().add(name, phoneNumber, birthday!);
+                          },
+                    child: const Text('Add'),
+                  ),
+                ],
               ),
-            );
-          },
-        ),
+            ),
+          );
+        },
       ),
     );
   }

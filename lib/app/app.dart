@@ -28,7 +28,7 @@ class RootPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => RootCubit()..start(),
-      child: BlocListener<RootCubit, RootState>(
+      child: BlocConsumer<RootCubit, RootState>(
         listener: (context, state) {
           if (state.errorMessage.isNotEmpty) {
             ScaffoldMessenger.of(context).showSnackBar(
@@ -47,16 +47,14 @@ class RootPage extends StatelessWidget {
             );
           }
         },
-        child: BlocBuilder<RootCubit, RootState>(
-          builder: (context, state) {
-            final user = state.user;
+        builder: (context, state) {
+          final user = state.user;
 
-            if (user == null) {
-              return LoginPage();
-            }
-            return HomePage(user: user);
-          },
-        ),
+          if (user == null) {
+            return LoginPage();
+          }
+          return HomePage(user: user);
+        },
       ),
     );
   }
