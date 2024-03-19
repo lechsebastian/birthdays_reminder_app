@@ -15,41 +15,41 @@ class BirthdaysPageContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => BirthdaysCubit(ItemsRepository())..start(),
-      child: BlocConsumer<BirthdaysCubit, BirthdaysState>(
-        listener: (context, state) {
-          if (state.status == Status.error) {
-            final errorMessage = state.errorMessage ?? 'Unknown error';
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text('Something went wrong: $errorMessage'),
-                backgroundColor: Colors.red,
-              ),
-            );
-          }
-          if (state.status == Status.loading) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('It\'s loading..'),
-                backgroundColor: Colors.red,
-              ),
-            );
-          }
-        },
+      child: BlocBuilder<BirthdaysCubit, BirthdaysState>(
         builder: (context, state) {
-          final itemModels = state.items;
-          return Padding(
-            padding: const EdgeInsets.all(24),
-            child: ListView(
-              children: [
-                for (final itemModel in itemModels) ...[
-                  _ListViewItem(itemModel: itemModel),
-                  const SizedBox(
-                    height: 24,
-                  ),
-                ],
-              ],
-            ),
-          );
+          switch (state.status) {
+            case Status.initial:
+              return const Center(
+                child: Text('Initial state'),
+              );
+            case Status.loading:
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            case Status.error:
+            case Status.removingError:
+              return Center(
+                child: Text(
+                  state.errorMessage ?? 'Unknown error',
+                  style: TextStyle(color: Theme.of(context).colorScheme.error),
+                ),
+              );
+            case Status.success:
+              final itemModels = state.items;
+              return Padding(
+                padding: const EdgeInsets.all(24),
+                child: ListView(
+                  children: [
+                    for (final itemModel in itemModels) ...[
+                      _ListViewItem(itemModel: itemModel),
+                      const SizedBox(
+                        height: 24,
+                      ),
+                    ],
+                  ],
+                ),
+              );
+          }
         },
       ),
     );
